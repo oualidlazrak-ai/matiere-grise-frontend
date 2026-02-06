@@ -21,7 +21,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // Configuration - À CHANGER selon ton tunnel
-const API_URL = 'http://localhost:8000';
+const API_URL = 'notepad C:\Users\ouali\matiere-grise\matiere-grise-frontend\MatiereGrise.jsx';
 
 export default function MatiereGriseV2() {
   // Auth state
