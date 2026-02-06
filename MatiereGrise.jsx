@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from 'react';
 
 // Configuration API - À changer selon ton tunnel Cloudflare
-const API_URL = 'http://localhost:8000';
+const API_URL = 'https://struck-same-economies-automatically.trycloudflare.com';
 
 export default function MatiereGrise() {
   const [currentStrate, setCurrentStrate] = useState('surface');
