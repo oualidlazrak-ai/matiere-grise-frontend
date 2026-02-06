@@ -2,7 +2,7 @@
 
 Interface web pour la plateforme de recherche-création.
 
-Esthétique : **Mounir Fatmi** / Archive / Archéologie  
+Esthétique : Archive / Archéologie  
 Noir et blanc strict, typographie comme matière.
 
 ---
