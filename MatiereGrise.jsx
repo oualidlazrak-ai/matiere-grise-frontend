@@ -21,7 +21,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // Configuration - À CHANGER selon ton tunnel
-const API_URL = 'https://accuracy-disclaimers-accompanying-dam.trycloudflare.com';
+const API_URL = 'https://estimated-next-regardless-existence.trycloudflare.com';
 
 export default function MatiereGriseV2() {
   // Auth state
