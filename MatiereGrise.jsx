@@ -13,39 +13,39 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-const API_URL = 'https://advancement-practical-hong-britney.trycloudflare.com';
+const API_URL = 'https://prep-membrane-vocational-connect.trycloudflare.com';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ICÔNES SVG
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const Icons = {
-  document: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
-  image: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
-  note: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
-  link: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
-  video: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>,
-  upload: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
-  eye: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
-  send: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-  search: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
-  globe: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
-  plus: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
-  x: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-  check: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="20 6 9 17 4 12"/></svg>,
-  user: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-  message: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
-  layers: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>,
-  logout: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
-  comment: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>,
-  trash: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
-  download: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-  arrow: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
-  brain: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.04"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.04"/></svg>,
-  highlight: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
-  bookmark: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>,
-  zap: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-  file: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>,
+  document: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>,
+  image: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>,
+  note: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>,
+  link: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>,
+  video: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></svg>,
+  upload: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>,
+  eye: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>,
+  send: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>,
+  search: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>,
+  globe: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>,
+  plus: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>,
+  x: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>,
+  check: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="20 6 9 17 4 12" /></svg>,
+  user: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
+  message: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>,
+  layers: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></svg>,
+  logout: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>,
+  comment: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>,
+  trash: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>,
+  download: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>,
+  arrow: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>,
+  brain: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.04" /><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.04" /></svg>,
+  highlight: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>,
+  bookmark: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /></svg>,
+  zap: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>,
+  file: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><polyline points="13 2 13 9 20 9" /></svg>,
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -206,18 +206,18 @@ const T = {
 export default function MatiereGrise() {
   const [lang, setLang] = useState('fr');
   const t = T[lang];
-  
+
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
-  
+
   const [view, setView] = useState('surface');
   const [depth, setDepth] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
-  
+
   const [modal, setModal] = useState(null);
   const [modalData, setModalData] = useState(null);
-  
+
   const [contents, setContents] = useState([]);
   const [selected, setSelected] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -226,11 +226,11 @@ export default function MatiereGrise() {
   const [collectiveContents, setCollectiveContents] = useState([]);
   const [publicContents, setPublicContents] = useState([]);
   const [syntheses, setSyntheses] = useState([]);
-  
+
   const [chatInput, setChatInput] = useState('');
   const [searchWeb, setSearchWeb] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const chatRef = useRef(null);
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -256,7 +256,7 @@ export default function MatiereGrise() {
       }
     }
   }, [token, ready]);
-  
+
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -284,57 +284,57 @@ export default function MatiereGrise() {
         localStorage.setItem('mg_user_id', data.id.toString());
         if (!data.is_profile_complete) openModal('profile');
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const fetchContents = async () => {
     try {
       const res = await api('/api/contents');
       if (res.ok) setContents(await res.json());
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const fetchConversations = async () => {
     try {
       const res = await api('/api/conversations');
       if (res.ok) setConversations(await res.json());
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const fetchCollective = async (strate) => {
     try {
       const res = await api(`/api/strate/${strate}/contents`);
       if (res.ok) setCollectiveContents(await res.json());
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const fetchPublic = async () => {
     try {
       const res = await fetch(`${API_URL}/api/surface/contents`);
       if (res.ok) setPublicContents(await res.json());
-    } catch (e) {}
+    } catch (e) { }
   };
-  
+
   const fetchSyntheses = async () => {
     try {
       const res = await api('/api/syntheses');
       if (res.ok) setSyntheses(await res.json());
-    } catch (e) {}
+    } catch (e) { }
   };
-  
+
   const fetchContentDetail = async (contentId) => {
     try {
       const res = await api(`/api/contents/${contentId}`);
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
     return null;
   };
-  
+
   const fetchAnnotations = async (contentId) => {
     try {
       const res = await api(`/api/contents/${contentId}/annotations`);
       if (res.ok) return await res.json();
-    } catch (e) {}
+    } catch (e) { }
     return [];
   };
 
@@ -428,14 +428,14 @@ export default function MatiereGrise() {
       formData.append('title', title);
       formData.append('description', description || '');
       formData.append('tags', JSON.stringify(tags || []));
-      
+
       const res = await fetch(`${API_URL}/api/contents/upload`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
       });
-      if (res.ok) { 
-        fetchContents(); 
+      if (res.ok) {
+        fetchContents();
         closeModal();
       }
     } catch (e) { alert('Erreur'); }
@@ -450,7 +450,7 @@ export default function MatiereGrise() {
         body: JSON.stringify({ content_type: 'note', title, text_content: text })
       });
       if (res.ok) { fetchContents(); closeModal(); }
-    } catch (e) {}
+    } catch (e) { }
     setLoading(false);
   };
 
@@ -463,7 +463,7 @@ export default function MatiereGrise() {
         body: JSON.stringify({ content_type: type, title, file_url: url, description: desc })
       });
       if (res.ok) { fetchContents(); closeModal(); }
-    } catch (e) {}
+    } catch (e) { }
     setLoading(false);
   };
 
@@ -474,7 +474,7 @@ export default function MatiereGrise() {
         body: JSON.stringify({ content_id: contentId, target_visibility: target })
       });
       if (res.ok) { fetchContents(); fetchPublic(); closeModal(); }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleDelete = async (contentId) => {
@@ -482,7 +482,7 @@ export default function MatiereGrise() {
     try {
       await api(`/api/contents/${contentId}`, { method: 'DELETE' });
       fetchContents();
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleReindex = async (contentId) => {
@@ -492,17 +492,17 @@ export default function MatiereGrise() {
       if (res.ok) {
         fetchContents();
       }
-    } catch (e) {}
+    } catch (e) { }
     setLoading(false);
   };
-  
+
   const handleAddAnnotation = async (contentId, text, type = 'comment') => {
     try {
       const res = await api('/api/annotations', {
         method: 'POST',
-        body: JSON.stringify({ 
-          content_id: contentId, 
-          text, 
+        body: JSON.stringify({
+          content_id: contentId,
+          text,
           annotation_type: type,
           visibility: 'strate'
         })
@@ -532,9 +532,9 @@ export default function MatiereGrise() {
       });
       if (res.ok) {
         const data = await res.json();
-        setMessages(prev => [...prev, { 
-          role: 'assistant', 
-          content: data.response, 
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: data.response,
           sources: data.sources,
           web_results: data.web_results,
           documents_used: data.documents_used
@@ -558,9 +558,9 @@ export default function MatiereGrise() {
     if (!c.file_url) return null;
     return c.file_url.startsWith('http') ? c.file_url : `${API_URL}${c.file_url}`;
   };
-  
+
   const getContentIcon = (type) => {
-    switch(type) {
+    switch (type) {
       case 'pdf': return Icons.document;
       case 'image': return Icons.image;
       case 'note': return Icons.note;
@@ -626,7 +626,7 @@ export default function MatiereGrise() {
           <section className="surface-hero">
             <h1 className="hero-title">{t.title}</h1>
             <p className="hero-subtitle">{t.subtitle}</p>
-            
+
             <div className="depth-indicator">
               <div className="depth-labels">
                 <div className="depth-label"><span className="depth-num">0m</span> {t.surface}</div>
@@ -685,7 +685,7 @@ export default function MatiereGrise() {
               {Icons.layers}<span className="strate-num">II</span>
             </button>
           </nav>
-          
+
           <aside className="sidebar">
             <div className="sb-section">
               <div className="sb-label">{t.import}</div>
@@ -693,11 +693,11 @@ export default function MatiereGrise() {
               <button className="sb-btn" onClick={() => openModal('note')}>{Icons.note} {t.newNote}</button>
               <button className="sb-btn" onClick={() => openModal('link')}>{Icons.link} {t.addLink}</button>
             </div>
-            
+
             <div className="sb-section">
               <div className="sb-label">Conversations</div>
               {conversations.slice(0, 4).map(c => (
-                <button 
+                <button
                   key={c.id}
                   className={`sb-btn ${currentConv?.id === c.id ? 'active' : ''}`}
                   onClick={() => { setCurrentConv(c); setMessages([]); }}
@@ -710,7 +710,7 @@ export default function MatiereGrise() {
               </button>
             </div>
           </aside>
-          
+
           <div className="content-area">
             <div className="content-header">
               <h1 className="content-title">{t.mySpace}</h1>
@@ -721,13 +721,13 @@ export default function MatiereGrise() {
                 </div>
               )}
             </div>
-            
+
             {contents.length === 0 ? (
               <div className="empty-box">{Icons.document}<p>Importez vos premiers documents</p></div>
             ) : (
               <div className="cards-grid">
                 {contents.map(c => (
-                  <ContentCard 
+                  <ContentCard
                     key={c.id}
                     content={c}
                     selected={selected.includes(c.id)}
@@ -743,7 +743,7 @@ export default function MatiereGrise() {
               </div>
             )}
           </div>
-          
+
           {/* Chat Panel */}
           <div className="chat-panel">
             <div className="chat-header">
@@ -756,7 +756,7 @@ export default function MatiereGrise() {
                 {Icons.globe} {t.searchWeb}
               </label>
             </div>
-            
+
             <div className="chat-messages" ref={chatRef}>
               {messages.length === 0 && (
                 <div className="chat-empty">
@@ -792,7 +792,7 @@ export default function MatiereGrise() {
               ))}
               {loading && <div className="loading-indicator">{t.loading}</div>}
             </div>
-            
+
             <div className="chat-input-row">
               <input
                 type="text"
@@ -828,7 +828,7 @@ export default function MatiereGrise() {
               {Icons.layers}<span className="strate-num">II</span>
             </button>
           </nav>
-          
+
           <aside className="sidebar">
             <div className="sb-section">
               <div className="sb-label">{t.collective}</div>
@@ -842,12 +842,12 @@ export default function MatiereGrise() {
               </button>
             </div>
           </aside>
-          
+
           <div className="content-area full">
             <div className="content-header">
               <h1 className="content-title">{depth === 1 ? t.strate1 : t.strate2}</h1>
             </div>
-            
+
             {collectiveContents.length === 0 ? (
               <div className="empty-box">{Icons.layers}<p>{t.noResults}</p></div>
             ) : (
@@ -874,11 +874,11 @@ export default function MatiereGrise() {
       {/* ═══════════════════════════════════════════════════════════════════
           MODALS
       ═══════════════════════════════════════════════════════════════════ */}
-      
+
       {modal && (
         <div className="modal-backdrop" onClick={closeModal}>
           <div className={`modal-box ${modal === 'contentViewer' ? 'large' : ''}`} onClick={e => e.stopPropagation()}>
-            
+
             {modal === 'login' && (
               <>
                 <h2 className="modal-title">{t.connect}</h2>
@@ -888,7 +888,7 @@ export default function MatiereGrise() {
                 </div>
               </>
             )}
-            
+
             {modal === 'register' && (
               <>
                 <h2 className="modal-title">{t.register}</h2>
@@ -898,35 +898,35 @@ export default function MatiereGrise() {
                 </div>
               </>
             )}
-            
+
             {modal === 'profile' && user && (
               <>
                 <h2 className="modal-title">{t.profile}</h2>
                 <ProfileForm t={t} user={user} token={token} apiUrl={API_URL} onClose={closeModal} onUpdate={fetchProfile} />
               </>
             )}
-            
+
             {modal === 'upload' && (
               <>
                 <h2 className="modal-title">{t.upload}</h2>
                 <UploadForm t={t} onSubmit={handleUpload} loading={loading} onClose={closeModal} />
               </>
             )}
-            
+
             {modal === 'note' && (
               <>
                 <h2 className="modal-title">{t.newNote}</h2>
                 <NoteForm t={t} onSubmit={handleCreateNote} loading={loading} onClose={closeModal} />
               </>
             )}
-            
+
             {modal === 'link' && (
               <>
                 <h2 className="modal-title">{t.addLink}</h2>
                 <LinkForm t={t} onSubmit={handleCreateLink} loading={loading} onClose={closeModal} />
               </>
             )}
-            
+
             {modal === 'glissement' && modalData && (
               <>
                 <h2 className="modal-title">{t.slideTo}</h2>
@@ -942,9 +942,9 @@ export default function MatiereGrise() {
                 <button className="form-btn secondary full" onClick={closeModal}>{t.cancel}</button>
               </>
             )}
-            
+
             {modal === 'contentViewer' && modalData && (
-              <ContentViewer 
+              <ContentViewer
                 content={modalData}
                 token={token}
                 apiUrl={API_URL}
@@ -956,7 +956,7 @@ export default function MatiereGrise() {
                 getIcon={getContentIcon}
               />
             )}
-            
+
             {modal === 'syntheses' && (
               <>
                 <h2 className="modal-title">{t.syntheses}</h2>
@@ -964,7 +964,7 @@ export default function MatiereGrise() {
                 <button className="form-btn primary full" onClick={closeModal}>{t.close}</button>
               </>
             )}
-            
+
           </div>
         </div>
       )}
@@ -1014,11 +1014,11 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
   const [annotationType, setAnnotationType] = useState('comment');
   const [tab, setTab] = useState('content');
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     loadData();
   }, [content.id]);
-  
+
   const loadData = async () => {
     setLoading(true);
     const d = await fetchDetail(content.id);
@@ -1027,7 +1027,7 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
     setAnnotations(a);
     setLoading(false);
   };
-  
+
   const handleSubmitAnnotation = async () => {
     if (!newAnnotation.trim()) return;
     const success = await onAddAnnotation(content.id, newAnnotation, annotationType);
@@ -1036,9 +1036,9 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
       loadData();
     }
   };
-  
+
   const fileUrl = detail?.file_url ? (detail.file_url.startsWith('http') ? detail.file_url : `${apiUrl}${detail.file_url}`) : null;
-  
+
   return (
     <div className="content-viewer">
       <div className="viewer-header">
@@ -1049,7 +1049,7 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
         )}
         <button className="viewer-close" onClick={onClose}>{Icons.x}</button>
       </div>
-      
+
       <div className="viewer-tabs">
         <button className={`viewer-tab ${tab === 'content' ? 'active' : ''}`} onClick={() => setTab('content')}>
           {Icons.file} {t.content}
@@ -1058,7 +1058,7 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
           {Icons.comment} {t.annotations} ({annotations.length})
         </button>
       </div>
-      
+
       {loading ? (
         <div className="viewer-loading">{t.loading}</div>
       ) : (
@@ -1074,14 +1074,14 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
                   </a>
                 </div>
               )}
-              
+
               {/* Image */}
               {content.content_type === 'image' && fileUrl && (
                 <div className="viewer-image">
                   <img src={fileUrl} alt={content.title} />
                 </div>
               )}
-              
+
               {/* Vision description */}
               {detail?.vision_description && (
                 <div className="viewer-vision">
@@ -1089,7 +1089,7 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
                   <p>{detail.vision_description}</p>
                 </div>
               )}
-              
+
               {/* Text content */}
               {detail?.text_content && (
                 <div className="viewer-text">
@@ -1097,7 +1097,7 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
                   <div className="text-content">{detail.text_content}</div>
                 </div>
               )}
-              
+
               {/* Link / Video */}
               {(content.content_type === 'link' || content.content_type === 'video') && detail?.file_url && (
                 <div className="viewer-link">
@@ -1106,7 +1106,7 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
                   </a>
                 </div>
               )}
-              
+
               {/* Description */}
               {detail?.description && (
                 <div className="viewer-description">
@@ -1115,13 +1115,13 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
               )}
             </div>
           )}
-          
+
           {tab === 'annotations' && (
             <div className="viewer-annotations">
               <div className="annotation-form">
                 <div className="annotation-types">
                   {['comment', 'highlight', 'question'].map(type => (
-                    <button 
+                    <button
                       key={type}
                       className={`type-btn ${annotationType === type ? 'active' : ''}`}
                       onClick={() => setAnnotationType(type)}
@@ -1143,7 +1143,7 @@ function ContentViewer({ content, token, apiUrl, onClose, onAddAnnotation, fetch
                   {Icons.send} {t.add}
                 </button>
               </div>
-              
+
               <div className="annotations-list">
                 {annotations.length === 0 ? (
                   <div className="no-annotations">{t.noResults}</div>
@@ -1176,7 +1176,7 @@ function SynthesesList({ syntheses, t }) {
   if (syntheses.length === 0) {
     return <div className="no-syntheses">{t.noSyntheses}</div>;
   }
-  
+
   return (
     <div className="syntheses-list">
       {syntheses.map(s => (
@@ -1259,7 +1259,7 @@ function ProfileForm({ t, user, token, apiUrl, onClose, onUpdate }) {
   const [bio, setBio] = useState(user.bio || '');
   const [inst, setInst] = useState(user.institution || '');
   const [loading, setLoading] = useState(false);
-  
+
   const submit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -1271,7 +1271,7 @@ function ProfileForm({ t, user, token, apiUrl, onClose, onUpdate }) {
     onUpdate();
     onClose();
   };
-  
+
   return (
     <form onSubmit={submit}>
       <div className="profile-info">{user.email} · {user.role} · {user.strate}</div>
