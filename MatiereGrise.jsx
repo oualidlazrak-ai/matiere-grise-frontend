@@ -13,7 +13,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-const API_URL = ' https://sale-frederick-shell-crowd.trycloudflare.com';
+const API_URL = 'https://wall-statistics-troubleshooting-discount.trycloudflare.com ';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ICÔNES SVG
