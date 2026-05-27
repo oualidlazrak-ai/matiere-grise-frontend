@@ -13,7 +13,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-const API_URL = 'https://remainder-classification-initial-filter.trycloudflare.com';
+const API_URL = 'https://primary-memphis-complex-men.trycloudflare.com';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ICÔNES SVG
