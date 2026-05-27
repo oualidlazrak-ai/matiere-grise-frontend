@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-const API_URL = 'https://saved-anthropology-guest-workstation.trycloudflare.com';
+const API_URL = 'https://textiles-created-jam-praise.trycloudflare.com';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // GRAPH VIEW COMPONENT
