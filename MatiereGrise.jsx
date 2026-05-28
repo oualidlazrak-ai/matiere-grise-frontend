@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
-const API_URL = 'https://candidate-offshore-utilities-eventually.trycloudflare.com';
+const API_URL = 'https://forums-activity-bon-decision.trycloudflare.com';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TRANSLATIONS
